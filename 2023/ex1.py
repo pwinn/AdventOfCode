@@ -9,8 +9,7 @@ with open('input1.txt') as input:
         digits = list(map(int, filter(str.isdigit, line)))
         resultA += (digits[0]*10) + digits[-1]
         # B (third attempt)
-        lineB = line
-        [lineB := lineB.replace(num, digit) for num, digit in numbers.items()]
-        digitsB = list(map(int, filter(str.isdigit, lineB)))
-        resultB += (digitsB[0]*10) + digitsB[-1]
+        [line := line.replace(num, digit) for num, digit in numbers.items()]
+        digits = list(map(int, filter(str.isdigit, line)))
+        resultB += (digits[0]*10) + digits[-1]
     print(resultA, resultB)
