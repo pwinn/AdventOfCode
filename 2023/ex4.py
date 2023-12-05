@@ -17,7 +17,7 @@ def get_resultB(cards):
     return sum(num_cards.values())
 
 if __name__ == '__main__':
-    with open('input4.txt') as input:
+    with open('input/input4.txt') as input:
         scoreA, scoreB = 0, 0
         cards = {}
         for line in input.read().splitlines():

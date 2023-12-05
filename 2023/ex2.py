@@ -4,7 +4,7 @@ from functools import reduce
 import operator
 
 if __name__ == '__main__':
-    with open('input2.txt') as input:
+    with open('input/input2.txt') as input:
         maxes = {'red': 12, 'green': 13, 'blue': 14}
         resultA, resultB = 0, 0
         for line in input.read().splitlines():
