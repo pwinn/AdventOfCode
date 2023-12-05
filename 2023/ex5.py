@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-from functools import reduce
-
 def trace_seed(seed):
     for i in range(len(maps)):
       for m in maps[i]:
