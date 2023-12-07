@@ -26,14 +26,16 @@ def rank(cards, mode):
             ctr['2'] = j_val
         else:
             # shame, shame
-            if len(ctr.most_common()) > 1 and ctr.most_common()[0][1] == ctr.most_common()[1][1]:
-                a, b = orderB[ctr.most_common()[0][0]], orderB[ctr.most_common()[1][0]]
+            most = ctr.most_common()
+            if len(most) > 1 and most[0][1] == most[1][1]:
+                # Break the tie with a pseudo-sort
+                a, b = orderB[most[0][0]], orderB[most[1][0]]
                 if b > a:
-                    ctr[ctr.most_common()[1][0]] += j_val
+                    ctr[most[1][0]] += j_val
                 else:
-                    ctr[ctr.most_common()[0][0]] += j_val
+                    ctr[most[0][0]] += j_val
             else:
-                ctr[ctr.most_common()[0][0]] += j_val
+                ctr[most[0][0]] += j_val
     ctr_lst = list(ctr.values())
     if 5 in ctr_lst:
         rank = 6
