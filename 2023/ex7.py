@@ -51,12 +51,8 @@ def rank(cards, mode):
         rank = 0
     return rank
 
-def get_resultA(lines):
+def get_resultA(hands):
     result = 0
-    hands = []
-    for line in lines:
-        cards, bid = line.split()
-        hands.append((rank(cards, 'A'), cards, int(bid)))
     hands.sort(reverse=True, key=hand_sort)
     for i in range(len(hands)):
         handrank = len(hands)-i
@@ -65,10 +61,6 @@ def get_resultA(lines):
 
 def get_resultB(hands):
     result = 0
-    hands = []
-    for line in lines:
-        cards, bid = line.split()
-        hands.append((rank(cards, 'B'), cards, int(bid)))
     hands.sort(reverse=True, key=hand_sort_b)
     for i in range(len(hands)):
         handrank = len(hands)-i
@@ -77,7 +69,9 @@ def get_resultB(hands):
 
 if __name__ == '__main__':
     with open('input/input7.txt') as input:
-        lines = []
+        handsA, handsB = [], []
         for line in input:
-            lines.append(line)
-        print(get_resultA(lines), get_resultB(lines))
+            cards, bid = line.split()
+            handsA.append((rank(cards, 'A'), cards, int(bid)))
+            handsB.append((rank(cards, 'B'), cards, int(bid)))
+        print(get_resultA(handsA), get_resultB(handsB))
