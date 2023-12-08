@@ -1,47 +1,42 @@
 #!/usr/bin/python3
 
-from math import lcm
+import math
 from multiprocessing import Process, Queue
 
-def get_resultA(loop, network, start, target, queue):
-    result, step = 0, 0
-    current = start
-    while True:
-        result += 1
-        choices = network[current]
-        if loop[step] == 'L':
-            current = choices[1:4]
+def count_steps(loop, network, start, target, queue=None):
+    step, current = 0, start
+    while not current.endswith(target):
+        if loop[step%len(loop)] == 'L':
+            current = network[current][1:4]
         else:
-            current = choices[6:9]
-        if current.endswith(target):
-            if queue:
-                queue.put(result)
-            return result
-        if step+1 == len(loop):
-            step = 0
-        else:
-            step += 1
+            current = network[current][6:9]
+        step += 1
+    if queue:
+        queue.put(step)
+    return step
 
-def get_resultB(loop, network, starts, target):
-    result, processes, queue = 0, [], Queue()
+def get_resultB(starts, target):
+    processes, queue = [], Queue()
+    # Count in parallel
     for start in sources:
-        p = Process(target=get_resultA, args=(loop, network, start, target, queue))
+        p = Process(target=count_steps, args=(loop, network, start, target, queue))
         processes.append(p)
         p.start()
+    # Collect parallel results
     combined_results = []
     for p in processes:
         combined_results.append(queue.get())
         p.join()
-    result = lcm(*combined_results)
-    return result
+    # Math is nice
+    return math.lcm(*combined_results)
 
 if __name__ == '__main__':
     with open('input/input8.txt') as input:
         network, sources = {}, []
-        loop, nodes = input.read().split('\n\n')
-        for node in nodes.strip().split('\n'):
+        loop, nodes = input.read().strip().split('\n\n')
+        for node in nodes.split('\n'):
             pieces = node.split(' = ')
             network[pieces[0]] = pieces[1]
             if pieces[0].endswith('A'):
                 sources.append(pieces[0])
-        print(get_resultA(loop, network, 'AAA', 'ZZZ', None), get_resultB(loop, network, sources, 'Z'))
+        print(count_steps(loop, network, 'AAA', 'ZZZ'), get_resultB(sources, 'Z'))
