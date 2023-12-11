@@ -61,6 +61,41 @@ def determine_start(first, last):
         result = '7'
     return result
 
+def visualize(graph, row, col):
+    loop, first, last = get_loop(graph, row, col)
+    graph[row][col] = determine_start(first, last)
+    # Anything non-loop is a .
+    for row in range(len(graph)):
+        line = ''.join(graph[row])
+        ms = re.findall('L-*7|F-*J', line)
+        if ms:
+            for m in ms:
+                spcs=('.' * (len(m) - 1))
+                line = line.replace(m, '|'+spcs)
+        for col in range(len(graph[row])):
+            ch = graph[row][col]
+            if (row, col) in loop:
+                if ch == 'F':
+                    ch = u'\u250c'
+                elif ch == '7':
+                    ch = u'\u2510'
+                elif ch == 'L':
+                    ch = u'\u2514'
+                elif ch == 'J':
+                    ch = u'\u2518'
+                elif ch == '-':
+                    ch = u'\u2500'
+                elif ch == '|':
+                    ch = u'\u2502'
+            else:
+                ch = '.'
+                if line[:col].count('|') % 2 > 0:
+                    ch = '*'
+                line = line[:col]+ch+line[col+1:]
+            graph[row][col] = ch
+    for line in graph:
+        print(''.join(line))
+
 def result_a(graph, row, col):
     return len(get_loop(graph, row, col)[0]) // 2
 
@@ -92,3 +127,5 @@ if __name__ == '__main__':
                 start_row, start_col = row, line.index('S')
             graph.append(list(line))
         print(result_a(graph, start_row, start_col), result_b(graph, start_row, start_col))
+        graph[start_row][start_col] = 'S'
+        visualize(graph, start_row, start_col)
