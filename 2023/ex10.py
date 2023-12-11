@@ -75,16 +75,14 @@ def result_b(graph, row, col):
                 graph[row][col] = '.'
     # Simplify
     for line in graph:
-        line = list(re.sub('F-*7', '', ''.join(line)))
-        line = list(re.sub('L-*J', '', ''.join(line)))
-        line = list(re.sub('L-*7', '|', ''.join(line)))
-        line = list(re.sub('F-*J', '|', ''.join(line)))
+        line = re.sub('F-*7|L-*J', '', ''.join(line)).strip('.')
+        line = re.sub('L-*7|F-*J', '|', line)
         # Use parity
-        for i, ch in enumerate(line):
-            if ch == '.' and line[:i].count('|') % 2 > 0:
-                result += 1
+        if '.' in line:
+            for i, ch in enumerate(line):
+                if ch == '.' and line[:i].count('|') % 2 > 0:
+                    result += 1
     return result
-    
 
 if __name__ == '__main__':
     with open('input/input10.txt') as input:
