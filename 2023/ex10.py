@@ -15,66 +15,74 @@ def west(graph, row, column):
     return graph[row][column-1] if column > 0 else None
 
 def get_loop(graph, row, col):
-    last, loop = None, []
+    first, last, loop = None, None, []
     while last is None or graph[row][col] != 'S':
         current = graph[row][col]
         if last != 'south' and current in ['S', '|', 'L', 'J'] and north(graph, row, col) in ['|', '7', 'F', 'S']:
             row -= 1
             last = 'north'
+            if not first:
+                first = last
         elif last != 'west' and current in ['S', '-', 'L', 'F'] and east(graph, row, col) in ['-', 'J', '7', 'S']:
             col += 1
             last = 'east'
+            if not first:
+                first = last
         elif last != 'north' and current in ['S', '|', '7', 'F'] and south(graph, row, col) in ['|', 'L', 'J', 'S']:
             row += 1
             last = 'south'
+            if not first:
+                first = last
         elif last != 'east' and current in ['S', '-', '7', 'J'] and west(graph, row, col) in ['-', 'L', 'F', 'S']:
             col -= 1
             last = 'west'
+            if not first:
+                first = last
         else:
             print('shit')
         loop.append((row, col))
-    return loop
+    return (loop, first, last)
 
-def determine_start(graph, row, col):
-    # Could be anything, hard-coding for now
-    return 'J'
+def determine_start(first, last):
+    result = 'S'
+    if first == 'north':
+        if last == 'west':
+            result = 'L'
+        elif last == 'east':
+            result = 'J'
+        else:
+            result = '|'
+    elif first == 'east':
+        if last == 'north':
+            result = 'F'
+        else:
+            result = '-'
+    else:
+        result = '7'
+    return result
 
 def result_a(graph, row, col):
-    return len(get_loop(graph, row, col)) // 2
+    return len(get_loop(graph, row, col)[0]) // 2
 
 def result_b(graph, row, col):
     result = 0
-    # Do the loop again, but this time store each coordinate set
-    loop = get_loop(graph, row, col)
-    graph[row][col] = determine_start(graph, row, col)
+    loop, first, last = get_loop(graph, row, col)
+    graph[row][col] = determine_start(first, last)
     # Anything non-loop is a .
     for row in range(len(graph)):
         for col in range(len(graph[row])):
             if (row, col) not in loop:
                 graph[row][col] = '.'
-    # Replace L7 and FJ combos with |
-    for line_num, line in enumerate(graph):
+    # Simplify
+    for line in graph:
+        line = list(re.sub('F-*7', '', ''.join(line)))
+        line = list(re.sub('L-*J', '', ''.join(line)))
         line = list(re.sub('L-*7', '|', ''.join(line)))
         line = list(re.sub('F-*J', '|', ''.join(line)))
-        graph[line_num] = line
-    # For each non-loop, count the | to their left. 0 or Odd = out, Even = in
-        pipes = 0
-        for ch in line:
-            #print(ch, pipes, pipes % 2, result)
-            if ch == '|':
-                pipes += 1
-            if ch == '.' and pipes % 2 > 0:
+        # Use parity
+        for i, ch in enumerate(line):
+            if ch == '.' and line[:i].count('|') % 2 > 0:
                 result += 1
-    #for row in range(len(graph)):
-    #    for col in range(len(graph[row])):
-    #        if graph[row][col] == '.':
-    #            print(graph[row][:col], graph[row][:col].count('|'), 'mod', graph[row][:col].count('|') % 2)
-    #            if graph[row][:col].count('|') % 2:
-    #                result += 1
-    #                graph[row][col] = '*'
-    #            #print('mod', graph[row][:col].count('|') % 2, 'result', result)
-    #        if col == len(graph[row])-1:
-    #            print(''.join(graph[row]))
     return result
     
 
