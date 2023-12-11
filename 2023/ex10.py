@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-import re
-
 def north(graph, row, column):
     return graph[row-1][column] if row > 0 else None
 
@@ -67,11 +65,6 @@ def visualize(graph, row, col):
     # Anything non-loop is a .
     for row in range(len(graph)):
         line = ''.join(graph[row])
-        ms = re.findall('L-*7|F-*J', line)
-        if ms:
-            for m in ms:
-                spcs=('.' * (len(m) - 1))
-                line = line.replace(m, '|'+spcs)
         for col in range(len(graph[row])):
             ch = graph[row][col]
             if (row, col) in loop:
@@ -89,7 +82,7 @@ def visualize(graph, row, col):
                     ch = u'\u2502'
             else:
                 ch = '.'
-                if line[:col].count('|') % 2 > 0:
+                if (line[:col].count('|') + line[:col].count('L') + line[:col].count('J')) % 2 > 0:
                     ch = '*'
                 line = line[:col]+ch+line[col+1:]
             graph[row][col] = ch
