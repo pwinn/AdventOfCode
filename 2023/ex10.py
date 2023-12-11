@@ -110,8 +110,7 @@ def result_b(graph, row, col):
                 graph[row][col] = '.'
     # Simplify
     for line in graph:
-        line = re.sub('F-*7|L-*J', '', ''.join(line)).strip('.')
-        line = re.sub('L-*7|F-*J', '|', line)
+        line = ''.join(line).replace('-', '').replace('F7', '').replace('LJ', '').strip('.').replace('L7', '|').replace('FJ', '|')
         # Use parity
         if '.' in line:
             for i, ch in enumerate(line):
