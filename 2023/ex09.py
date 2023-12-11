@@ -9,7 +9,7 @@ def find_next(values):
 	return values[-1] + find_next(next)
 
 if __name__ == '__main__':
-    with open('input/input9.txt') as input:
+    with open('input/input09.txt') as input:
         result_a, result_b = 0, 0
         for line in input.read().splitlines():
             values = [int(n) for n in line.split()]

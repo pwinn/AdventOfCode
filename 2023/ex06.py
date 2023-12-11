@@ -24,7 +24,7 @@ def get_resultB(times, distances):
     return wins
 
 if __name__ == '__main__':
-    with open('input/input6.txt') as input:
+    with open('input/input06.txt') as input:
         lines = input.read().split('\n')
         times = [int(x) for x in lines[0].split(":")[1].split()]
         distances = [int(x) for x in lines[1].split(":")[1].split()]

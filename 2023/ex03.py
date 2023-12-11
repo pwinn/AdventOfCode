@@ -39,7 +39,7 @@ def symbol_is_adjacent(val, val_x, val_y):
     return False
 
 if __name__ == '__main__':
-    with open('input/input3.txt') as input:
+    with open('input/input03.txt') as input:
         schematic = []
         for line in input.read().splitlines():
             schematic.append(line)

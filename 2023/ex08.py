@@ -31,7 +31,7 @@ def get_resultB(starts, target):
     return math.lcm(*combined_results)
 
 if __name__ == '__main__':
-    with open('input/input8.txt') as input:
+    with open('input/input08.txt') as input:
         network, sources = {}, []
         loop, nodes = input.read().strip().split('\n\n')
         for node in nodes.split('\n'):

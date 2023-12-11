@@ -28,7 +28,7 @@ def get_resultB(seeds):
     return lowest_seed
 
 if __name__ == '__main__':
-    with open('input/input5.txt') as input:
+    with open('input/input05.txt') as input:
         sections = input.read().split('\n\n')
         seeds = [int(x) for x in sections[0].split(":")[1].split()]
         maps = []

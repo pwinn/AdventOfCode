@@ -70,7 +70,7 @@ def get_resultB(hands):
     return result
 
 if __name__ == '__main__':
-    with open('input/input7.txt') as input:
+    with open('input/input07.txt') as input:
         handsA, handsB = [], []
         for line in input:
             cards, bid = line.split()
